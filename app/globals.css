@@ -1,61 +1,112 @@
-/* Dark mode star background */
-body.dark {
-  background: radial-gradient(ellipse at bottom, #050d1b 0%, #000000 100%);
-  overflow: hidden;
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* --- Theme Variables --- */
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.12 0 0);
+  --font-sans: 'Geist Sans', sans-serif;
+  --font-mono: 'Geist Mono', monospace;
 }
 
-/* Layered stars for parallax effect */
-.stars, .stars2, .stars3 {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  background-repeat: repeat;
-  animation: moveStars linear infinite;
-  z-index: -1;
+.dark {
+  --background: oklch(0.08 0 0);
+  --foreground: oklch(0.95 0 0);
 }
 
-.stars {
-  background-image: radial-gradient(2px 2px at 20px 20px, #fff, transparent),
-                    radial-gradient(1px 1px at 40px 60px, #fff, transparent),
-                    radial-gradient(2px 2px at 80px 100px, #fff, transparent);
-  animation-duration: 200s;
+/* --- Base Styles --- */
+body {
+  font-family: var(--font-sans);
+  background: var(--background);
+  color: var(--foreground);
+  margin: 0;
+  padding: 0;
 }
 
-.stars2 {
-  background-image: radial-gradient(1.5px 1.5px at 10px 10px, #ccc, transparent),
-                    radial-gradient(1px 1px at 50px 90px, #ccc, transparent);
-  animation-duration: 400s;
-}
-
-.stars3 {
-  background-image: radial-gradient(1px 1px at 30px 40px, #999, transparent);
-  animation-duration: 600s;
-}
-
-@keyframes moveStars {
-  from { transform: translate3d(0,0,0); }
-  to { transform: translate3d(-50%, -50%, 0); }
-}
-
-/* Glassy effect for chat box */
-.chat-box {
+/* --- Glass Effect --- */
+.glass-effect {
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
-  padding: 1rem;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+}
+
+.dark .glass-effect {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- Transparent Chat Title --- */
+.chat-title {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(6px);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  display: inline-block;
   color: white;
 }
 
-/* Transparent glassy title */
-.chat-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+/* --- Hide Scrollbars --- */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- Stars & Comet Background --- */
+.stars, .stars2, .stars3 {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: transparent;
+  background-image: radial-gradient(white 1px, transparent 1px);
+  background-repeat: repeat;
+  background-size: 2px 2px;
+  animation: moveStars 100s linear infinite;
+  opacity: 0.5;
+}
+
+.stars2 { opacity: 0.3; animation-duration: 150s; }
+.stars3 { opacity: 0.2; animation-duration: 200s; }
+
+@keyframes moveStars {
+  from { transform: translate(0,0); }
+  to { transform: translate(-50%, -50%); }
+}
+
+/* Comet */
+.comet {
+  position: absolute;
+  width: 2px;
+  height: 100px;
+  background: linear-gradient(to bottom, white, transparent);
+  top: -20%;
+  left: 80%;
+  transform: rotate(45deg);
+  animation: moveComet 5s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes moveComet {
+  0% { transform: translateX(0) translateY(0) rotate(45deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(-200vw) translateY(200vh) rotate(45deg); opacity: 0; }
+}
+
+/* --- Animations --- */
+@keyframes fade-in { from {opacity:0;} to {opacity:1;} }
+@keyframes slide-up { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+@keyframes slide-down { from {opacity:0; transform:translateY(-10px);} to {opacity:1; transform:translateY(0);} }
+@keyframes scale-in { from {opacity:0; transform:scale(0.95);} to {opacity:1; transform:scale(1);} }
+@keyframes message-in { from {opacity:0; transform:translateY(20px); filter:blur(4px);} to {opacity:1; transform:translateY(0); filter:blur(0);} }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in, .animate-slide-up, .animate-slide-down, .animate-scale-in, .animate-message-in {
+    animation: fade-in 200ms ease-out;
+  }
 }
