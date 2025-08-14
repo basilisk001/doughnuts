@@ -4,39 +4,33 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   --color-ring: var(--ring);
-  --color-input: var(--input);
   --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
+  --color-input: var(--input);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Charts */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Radii */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -120,137 +114,133 @@
     @apply bg-background text-foreground;
   }
 
-  /* Hide scrollbar while keeping functionality */
+  /* Hide scrollbar */
   .hide-scrollbar {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
-  
   .hide-scrollbar::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
+    display: none;
+  }
+
+  /* === Dark Mode Starry Background & Comet === */
+  .dark body {
+    background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000 100%);
+    overflow-x: hidden;
+  }
+  .dark body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: transparent;
+    background-image:
+      radial-gradient(2px 2px at 20px 30px, white, transparent),
+      radial-gradient(1.5px 1.5px at 150px 80px, white, transparent),
+      radial-gradient(1px 1px at 50px 150px, white, transparent),
+      radial-gradient(2px 2px at 250px 120px, white, transparent),
+      radial-gradient(1px 1px at 100px 200px, white, transparent),
+      radial-gradient(2px 2px at 300px 50px, white, transparent);
+    background-size: 200px 200px;
+    animation: star-move 200s linear infinite;
+    z-index: -2;
+    pointer-events: none;
+  }
+  @keyframes star-move {
+    from { transform: translateY(0); }
+    to { transform: translateY(-200px); }
+  }
+  .dark body::after {
+    content: '';
+    position: fixed;
+    width: 150px;
+    height: 2px;
+    background: linear-gradient(90deg, white, transparent);
+    top: -10px;
+    left: 50%;
+    opacity: 0;
+    transform: rotate(30deg);
+    animation: comet 8s ease-in-out infinite;
+    animation-delay: 3s;
+    z-index: -1;
+  }
+  @keyframes comet {
+    0%, 80%, 100% { transform: translateX(-200px) translateY(-200px) rotate(30deg); opacity: 0; }
+    10% { opacity: 1; }
+    30% { transform: translateX(300px) translateY(300px) rotate(30deg); opacity: 0; }
+  }
+}
+
+@layer components {
+  /* Transparent Chat Box in Dark Mode */
+  .dark .chat-box {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
   }
 }
 
 @layer utilities {
-  .animate-fade-in {
-    animation: fade-in 200ms ease-out;
-  }
-  
-  .animate-slide-up {
-    animation: slide-up 200ms ease-out;
-  }
-  
-  .animate-slide-down {
-    animation: slide-down 150ms ease-out;
-  }
-  
-  .animate-scale-in {
-    animation: scale-in 200ms ease-out;
-  }
-  
-  .animate-message-in {
-    animation: message-in 300ms ease-out;
-  }
+  /* Animations */
+  .animate-fade-in { animation: fade-in 200ms ease-out; }
+  .animate-slide-up { animation: slide-up 200ms ease-out; }
+  .animate-slide-down { animation: slide-down 150ms ease-out; }
+  .animate-scale-in { animation: scale-in 200ms ease-out; }
+  .animate-message-in { animation: message-in 300ms ease-out; }
 
+  /* Shadows */
   .shadow-border-small {
-    box-shadow: 
+    box-shadow:
       0 0 0 1px rgba(0, 0, 0, 0.08),
       0 1px 2px rgba(0, 0, 0, 0.12);
   }
-  
   .shadow-border-medium {
-    box-shadow: 
+    box-shadow:
       0 0 0 1px rgba(0, 0, 0, 0.08),
       0 2px 4px rgba(0, 0, 0, 0.12),
       0 1px 6px rgba(0, 0, 0, 0.05);
   }
-  
   .dark .shadow-border-small {
-    box-shadow: 
+    box-shadow:
       0 0 0 1px rgba(255, 255, 255, 0.1),
       0 1px 2px rgba(0, 0, 0, 0.4);
   }
-  
   .dark .shadow-border-medium {
-    box-shadow: 
+    box-shadow:
       0 0 0 1px rgba(255, 255, 255, 0.1),
       0 2px 4px rgba(0, 0, 0, 0.4),
       0 1px 6px rgba(0, 0, 0, 0.2);
   }
 
+  /* Glass Effect */
   .glass-effect {
     backdrop-filter: blur(12px);
     background: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
-  
   .dark .glass-effect {
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
-  
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  @keyframes slide-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes slide-down {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes scale-in {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-  
-  @keyframes message-in {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-      filter: blur(4px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
-    }
-  }
-  
+
+  /* Keyframes */
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slide-down { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes scale-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+  @keyframes message-in { from { opacity: 0; transform: translateY(20px); filter: blur(4px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+
+  /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .animate-fade-in,
     .animate-slide-up,
     .animate-slide-down,
     .animate-scale-in,
     .animate-message-in {
-      animation: fade-in 200ms ease-out;
+      animation: none !important;
     }
   }
 }
