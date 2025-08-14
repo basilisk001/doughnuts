@@ -60,7 +60,14 @@ export function Chat({ modelId = DEFAULT_MODEL }: { modelId: string }) {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="flex flex-col h-screen overflow-hidden relative">
+      {/* === Starry Background === */}
+      <div className="stars"></div>
+      <div className="stars2"></div>
+      <div className="stars3"></div>
+      <div className="comet"></div>
+
+      {/* === Top Controls === */}
       <div className="absolute top-3 left-3 md:top-4 md:left-4 z-10 flex gap-2 animate-fade-in">
         <Button
           onClick={handleNewChat}
@@ -72,14 +79,17 @@ export function Chat({ modelId = DEFAULT_MODEL }: { modelId: string }) {
         </Button>
         <ThemeToggle />
       </div>
+
+      {/* === Empty State / Title === */}
       {!hasMessages && (
         <div className="flex-1 flex flex-col items-center justify-center px-4 md:px-8 animate-fade-in">
           <div className="w-full max-w-2xl text-center space-y-8 md:space-y-12">
             <h1 className="text-3xl md:text-6xl font-light tracking-tight text-foreground animate-slide-up">
-              <span className="font-mono font-semibold tracking-tight bg-foreground text-background px-4 py-3 rounded-2xl shadow-border-medium">
+              <span className="chat-title">
                 AI GATEWAY
               </span>
             </h1>
+
             <div className="w-full animate-slide-up" style={{ animationDelay: '100ms' }}>
               <form
                 onSubmit={(e) => {
@@ -103,10 +113,7 @@ export function Chat({ modelId = DEFAULT_MODEL }: { modelId: string }) {
                       className="flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-base placeholder:text-muted-foreground/60"
                       onKeyDown={(e) => {
                         if (e.metaKey && e.key === "Enter") {
-                          sendMessage(
-                            { text: input },
-                            { body: { modelId: currentModelId } },
-                          );
+                          sendMessage({ text: input }, { body: { modelId: currentModelId } });
                           setInput("");
                         }
                       }}
@@ -128,6 +135,7 @@ export function Chat({ modelId = DEFAULT_MODEL }: { modelId: string }) {
         </div>
       )}
 
+      {/* === Chat Messages === */}
       {hasMessages && (
         <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full animate-fade-in overflow-hidden">
           <div className="flex-1 overflow-y-auto px-4 md:px-8 py-4 hide-scrollbar">
@@ -139,14 +147,12 @@ export function Chat({ modelId = DEFAULT_MODEL }: { modelId: string }) {
                     "whitespace-pre-wrap",
                     m.role === "user" &&
                       "bg-foreground text-background rounded-2xl p-3 md:p-4 ml-auto max-w-[90%] md:max-w-[75%] shadow-border-small font-medium text-sm md:text-base",
-                    m.role === "assistant" && "max-w-[95%] md:max-w-[85%] text-foreground/90 leading-relaxed text-sm md:text-base"
+                    m.role === "assistant" &&
+                      "max-w-[95%] md:max-w-[85%] text-foreground/90 leading-relaxed text-sm md:text-base"
                   )}
                 >
                   {m.parts.map((part, i) => {
-                    switch (part.type) {
-                      case "text":
-                        return <div key={`${m.id}-${i}`}>{part.text}</div>;
-                    }
+                    if (part.type === "text") return <div key={`${m.id}-${i}`}>{part.text}</div>;
                   })}
                 </div>
               ))}
@@ -157,6 +163,7 @@ export function Chat({ modelId = DEFAULT_MODEL }: { modelId: string }) {
         </div>
       )}
 
+      {/* === Error Alert === */}
       {error && (
         <div className="max-w-4xl mx-auto w-full px-4 md:px-8 pb-4 animate-slide-down">
           <Alert variant="destructive">
@@ -176,6 +183,7 @@ export function Chat({ modelId = DEFAULT_MODEL }: { modelId: string }) {
         </div>
       )}
 
+      {/* === Input at bottom === */}
       {hasMessages && (
         <div className="w-full max-w-4xl mx-auto">
           <form
@@ -200,10 +208,7 @@ export function Chat({ modelId = DEFAULT_MODEL }: { modelId: string }) {
                   className="flex-1 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-base placeholder:text-muted-foreground/60 font-medium"
                   onKeyDown={(e) => {
                     if (e.metaKey && e.key === "Enter") {
-                      sendMessage(
-                        { text: input },
-                        { body: { modelId: currentModelId } },
-                      );
+                      sendMessage({ text: input }, { body: { modelId: currentModelId } });
                       setInput("");
                     }
                   }}
@@ -223,6 +228,7 @@ export function Chat({ modelId = DEFAULT_MODEL }: { modelId: string }) {
         </div>
       )}
 
+      {/* === Footer === */}
       <footer className="pb-8 text-center animate-fade-in" style={{ animationDelay: '200ms' }}>
         <p className="text-xs md:text-sm text-muted-foreground">
           The models in the list are a small subset of those available in the
