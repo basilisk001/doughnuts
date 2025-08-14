@@ -1,35 +1,13 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* --- Theme Variables --- */
-:root {
-  --radius: 0.75rem;
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.12 0 0);
-  --font-sans: 'Geist Sans', sans-serif;
-  --font-mono: 'Geist Mono', monospace;
-}
-
-.dark {
-  --background: oklch(0.08 0 0);
-  --foreground: oklch(0.95 0 0);
-}
-
-/* --- Base Styles --- */
-body {
-  font-family: var(--font-sans);
-  background: var(--background);
-  color: var(--foreground);
-  margin: 0;
-  padding: 0;
-}
-
-/* --- Glass Effect --- */
+/* === Glass Effect === */
 .glass-effect {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius);
+  border-radius: 0.75rem;
 }
 
 .dark .glass-effect {
@@ -37,7 +15,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* --- Transparent Chat Title --- */
+/* === Transparent Chat Title === */
 .chat-title {
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(6px);
@@ -47,7 +25,7 @@ body {
   color: white;
 }
 
-/* --- Hide Scrollbars --- */
+/* === Hide Scrollbars === */
 .hide-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -56,7 +34,7 @@ body {
   display: none;
 }
 
-/* --- Stars & Comet Background --- */
+/* === Stars & Comet Background === */
 .stars, .stars2, .stars3 {
   position: absolute;
   width: 200%;
@@ -67,12 +45,11 @@ body {
   background-image: radial-gradient(white 1px, transparent 1px);
   background-repeat: repeat;
   background-size: 2px 2px;
-  animation: moveStars 100s linear infinite;
-  opacity: 0.5;
+  animation: moveStars linear infinite;
 }
-
-.stars2 { opacity: 0.3; animation-duration: 150s; }
-.stars3 { opacity: 0.2; animation-duration: 200s; }
+.stars { animation-duration: 100s; opacity: 0.5; }
+.stars2 { animation-duration: 150s; opacity: 0.3; }
+.stars3 { animation-duration: 200s; opacity: 0.2; }
 
 @keyframes moveStars {
   from { transform: translate(0,0); }
@@ -98,15 +75,16 @@ body {
   100% { transform: translateX(-200vw) translateY(200vh) rotate(45deg); opacity: 0; }
 }
 
-/* --- Animations --- */
-@keyframes fade-in { from {opacity:0;} to {opacity:1;} }
-@keyframes slide-up { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
-@keyframes slide-down { from {opacity:0; transform:translateY(-10px);} to {opacity:1; transform:translateY(0);} }
-@keyframes scale-in { from {opacity:0; transform:scale(0.95);} to {opacity:1; transform:scale(1);} }
-@keyframes message-in { from {opacity:0; transform:translateY(20px); filter:blur(4px);} to {opacity:1; transform:translateY(0); filter:blur(0);} }
+/* === Page Layout Defaults === */
+html, body, #__next {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-@media (prefers-reduced-motion: reduce) {
-  .animate-fade-in, .animate-slide-up, .animate-slide-down, .animate-scale-in, .animate-message-in {
-    animation: fade-in 200ms ease-out;
-  }
+body {
+  font-family: sans-serif;
+  background: black;
+  color: white;
 }
